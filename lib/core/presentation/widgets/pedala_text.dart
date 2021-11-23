@@ -4,8 +4,8 @@ import 'package:pedala/core/domain/utils/app_textstyle.dart';
 
 class PedalaText extends StatelessWidget {
   final String text;
-  final TextStyle style;
-  final TextAlign alignment;
+  final TextStyle? style;
+  final TextAlign? alignment;
 
   const PedalaText.headingOne(this.text,
       {Key? key, TextAlign align = TextAlign.start})
@@ -28,10 +28,9 @@ class PedalaText extends StatelessWidget {
         alignment = align,
         super(key: key);
   const PedalaText.subheading(this.text,
-      {Key? key, TextAlign align = TextAlign.start})
-      : style = subheadingStyle,
-        alignment = align,
-        super(key: key);
+      {Key? key, TextAlign align = TextAlign.start, this.style, this.alignment})
+      : super(key: key);
+
   const PedalaText.caption(this.text,
       {Key? key, TextAlign align = TextAlign.start})
       : style = captionStyle,
@@ -39,7 +38,7 @@ class PedalaText extends StatelessWidget {
         super(key: key);
   PedalaText.body(this.text,
       {Key? key,
-      Color color = AppColors.pedalaGrey,
+      Color color = AppColors.pedalaBody,
       TextAlign align = TextAlign.start})
       : style = bodyStyle.copyWith(color: color),
         alignment = align,
@@ -51,6 +50,7 @@ class PedalaText extends StatelessWidget {
       text,
       style: style,
       textAlign: alignment,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

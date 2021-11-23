@@ -1,5 +1,6 @@
 // Horizontal Spacing
 import 'package:flutter/material.dart';
+import 'package:pedala/core/domain/utils/app_colors.dart';
 
 const Widget horizontalSpaceTiny = SizedBox(width: 5.0);
 const Widget horizontalSpaceSmall = SizedBox(width: 10.0);
@@ -23,3 +24,12 @@ double screenHeightPercentage(BuildContext context, {double percentage = 1}) =>
 
 double screenWidthPercentage(BuildContext context, {double percentage = 1}) =>
     screenWidth(context) * percentage;
+
+List<BoxShadow> defaultBoxShadow = <BoxShadow>[
+  BoxShadow(
+    color: AppColors.pedalaBody.withOpacity(1),
+    spreadRadius: 1,
+    blurRadius: 8,
+    offset: const Offset(0, 8), // changes position of shadow
+  ),
+];
