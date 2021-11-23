@@ -83,7 +83,7 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         verticalSpaceLarge,
         PedalaButton(
-          title: 'Sign up',
+          title: 'Create Account',
           onTap: () {},
         ),
         verticalSpaceMedium,
