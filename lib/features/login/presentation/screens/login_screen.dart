@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
         verticalSpaceLarge,
         PedalaButton(
           title: 'Login',
-          onTap: () {},
+          onTap: () => context.router.push(const MenuScreen()),
         ),
         verticalSpaceMedium,
         GestureDetector(

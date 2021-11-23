@@ -2,6 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:pedala/features/login/presentation/screens/login_screen.dart';
 import 'package:pedala/features/login/presentation/screens/signup_screen.dart';
+import 'package:pedala/features/menu/presentation/screens/menu_screen.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
@@ -46,6 +47,10 @@ import 'package:pedala/features/login/presentation/screens/signup_screen.dart';
     AutoRoute<dynamic>(
       path: '/signup',
       page: SignupScreen,
+    ),
+    AutoRoute<dynamic>(
+      path: '/menu',
+      page: MenuScreen,
     )
   ],
 )
