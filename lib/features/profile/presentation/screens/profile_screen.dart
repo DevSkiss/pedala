@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
+
 import 'package:pedala/app/router/app_router.gr.dart';
+import 'package:flutter/material.dart';
 import 'package:pedala/core/presentation/widgets/pedala_button.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -16,9 +17,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     AutoRouter.of(context);
     return Scaffold(
       body: Center(
-        child: PedalaButton(
-          title: 'Logout',
-          onTap: () => context.router.replace(const LoginScreen()),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: PedalaButton(
+            title: 'Logout',
+            onTap: () => context.router.replace(const LoginScreen()),
+          ),
         ),
       ),
     );

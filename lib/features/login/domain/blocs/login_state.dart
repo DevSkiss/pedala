@@ -8,5 +8,6 @@ abstract class LoginState with _$LoginState {
     @Default(false) isLoading,
     @Default(false) hasError,
     @Default(false) success,
+    @Default(false) isAlreadyLoggedIn,
   }) = _LoginState;
 }

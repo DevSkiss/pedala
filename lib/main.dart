@@ -1,19 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:pedala/app/router/app_router.gr.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'app/locator_injection.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
-  runApp(PedalaApp());
+  runApp(const PedalaApp());
 }
 
-class PedalaApp extends StatelessWidget {
-  PedalaApp({Key? key}) : super(key: key);
+class PedalaApp extends StatefulWidget {
+  const PedalaApp({Key? key}) : super(key: key);
 
+  @override
+  State<PedalaApp> createState() => _PedalaAppState();
+}
+
+class _PedalaAppState extends State<PedalaApp> {
   final AppRouter _appRouter = AppRouter();
 
-  // This widget is the root of your application.
+  @override
+  void initState() {
+    permission();
+    super.initState();
+  }
+
+  void permission() async {
+    if (await Permission.location.isDenied ||
+        await Permission.location.isRestricted) {
+      await Permission.location.request();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
