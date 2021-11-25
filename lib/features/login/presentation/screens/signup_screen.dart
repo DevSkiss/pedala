@@ -1,21 +1,37 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pedala/core/domain/utils/app_colors.dart';
+import 'package:pedala/core/domain/utils/dialog_utils.dart';
 import 'package:pedala/core/domain/utils/ui_helpers.dart';
 import 'package:pedala/core/presentation/widgets/pedala_button.dart';
 import 'package:pedala/core/presentation/widgets/pedala_text.dart';
 import 'package:pedala/core/presentation/widgets/pedala_textfield.dart';
 import 'package:pedala/core/presentation/widgets/scrollable_column.dart';
+import 'package:pedala/features/login/domain/blocs/login_bloc.dart';
+import 'package:pedala/features/login/domain/blocs/login_state.dart';
 import 'package:pedala/generated/assets.gen.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends StatelessWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => LoginBloc(),
+      child: const SignupView(),
+    );
+  }
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class SignupView extends StatefulWidget {
+  const SignupView({Key? key}) : super(key: key);
+
+  @override
+  _SignupViewState createState() => _SignupViewState();
+}
+
+class _SignupViewState extends State<SignupView> {
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
@@ -23,75 +39,108 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController confirmPasswordController = TextEditingController();
 
   @override
+  void dispose() {
+    firstnameController.dispose();
+    lastnameController.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     AutoRouter.of(context);
-    return Scaffold(
-        body: ScrollableColumn(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      children: <Widget>[
-        const SizedBox(height: 50),
-        Image.asset(
-          Assets.images.logo.path,
-          height: 200,
-          width: 200,
-        ),
-        PedalaInputField(
-          placeholder: 'Firstname',
-          leading: const Icon(
-            Icons.person,
-            color: AppColors.pedalaRed,
-          ),
-          controller: firstnameController,
-        ),
-        verticalSpaceMedium,
-        PedalaInputField(
-          placeholder: 'Lastname',
-          leading: const Icon(
-            Icons.person,
-            color: AppColors.pedalaRed,
-          ),
-          controller: lastnameController,
-        ),
-        verticalSpaceMedium,
-        PedalaInputField(
-          placeholder: 'Username',
-          leading: const Icon(
-            Icons.person,
-            color: AppColors.pedalaRed,
-          ),
-          controller: usernameController,
-        ),
-        verticalSpaceMedium,
-        PedalaInputField(
-          placeholder: 'Password',
-          password: true,
-          leading: const Icon(
-            Icons.lock,
-            color: AppColors.pedalaRed,
-          ),
-          controller: passwordController,
-        ),
-        verticalSpaceMedium,
-        PedalaInputField(
-          placeholder: 'Confirm Password',
-          password: true,
-          leading: const Icon(
-            Icons.lock,
-            color: AppColors.pedalaRed,
-          ),
-          controller: confirmPasswordController,
-        ),
-        verticalSpaceLarge,
-        PedalaButton(
-          title: 'Sign up',
-          onTap: () {},
-        ),
-        verticalSpaceMedium,
-        GestureDetector(
-          onTap: () => context.router.pop(),
-          child: PedalaText.body('Login'),
-        )
-      ],
-    ));
+    return BlocConsumer<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state.success) {
+          DialogUtils.showDialogMessage(context,
+              title: 'Pedala',
+              message: 'Pedala Registration Success', onPressed: () async {
+            await context.popRoute();
+            await context.popRoute();
+          });
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+            body: state.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ScrollableColumn(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    children: <Widget>[
+                      const SizedBox(height: 50),
+                      Image.asset(
+                        Assets.images.logo.path,
+                        height: 200,
+                        width: 200,
+                      ),
+                      PedalaInputField(
+                        placeholder: 'Firstname',
+                        leading: const Icon(
+                          Icons.person,
+                          color: AppColors.pedalaRed,
+                        ),
+                        controller: firstnameController,
+                      ),
+                      verticalSpaceMedium,
+                      PedalaInputField(
+                        placeholder: 'Lastname',
+                        leading: const Icon(
+                          Icons.person,
+                          color: AppColors.pedalaRed,
+                        ),
+                        controller: lastnameController,
+                      ),
+                      verticalSpaceMedium,
+                      PedalaInputField(
+                        placeholder: 'Username',
+                        leading: const Icon(
+                          Icons.person,
+                          color: AppColors.pedalaRed,
+                        ),
+                        controller: usernameController,
+                      ),
+                      verticalSpaceMedium,
+                      PedalaInputField(
+                        placeholder: 'Password',
+                        password: true,
+                        leading: const Icon(
+                          Icons.lock,
+                          color: AppColors.pedalaRed,
+                        ),
+                        controller: passwordController,
+                      ),
+                      verticalSpaceMedium,
+                      PedalaInputField(
+                        placeholder: 'Confirm Password',
+                        password: true,
+                        leading: const Icon(
+                          Icons.lock,
+                          color: AppColors.pedalaRed,
+                        ),
+                        controller: confirmPasswordController,
+                      ),
+                      verticalSpaceLarge,
+                      PedalaButton(
+                        title: 'Create Account',
+                        onTap: () => context.read<LoginBloc>().createAccount(
+                              firstname: firstnameController.text,
+                              lastname: lastnameController.text,
+                              username: usernameController.text,
+                              password: passwordController.text,
+                            ),
+                      ),
+                      verticalSpaceMedium,
+                      GestureDetector(
+                        onTap: () => context.router.pop(),
+                        child: PedalaText.body('Login'),
+                      )
+                    ],
+                  ));
+      },
+    );
   }
 }

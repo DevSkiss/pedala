@@ -46,11 +46,13 @@ class PedalaText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: style,
-      textAlign: alignment,
-      overflow: TextOverflow.ellipsis,
+    return FittedBox(
+      child: Text(
+        text,
+        style: style,
+        textAlign: alignment,
+        overflow: TextOverflow.ellipsis,
+      ),
     );
   }
 }
