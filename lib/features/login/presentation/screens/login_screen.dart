@@ -11,10 +11,8 @@ import 'package:pedala/core/presentation/widgets/pedala_button.dart';
 import 'package:pedala/core/presentation/widgets/pedala_text.dart';
 import 'package:pedala/core/presentation/widgets/pedala_textfield.dart';
 import 'package:pedala/core/presentation/widgets/scrollable_column.dart';
-import 'package:pedala/features/home/presentation/screens/home_screen.dart';
 import 'package:pedala/features/login/domain/blocs/login_bloc.dart';
 import 'package:pedala/features/login/domain/blocs/login_state.dart';
-import 'package:pedala/features/login/domain/repositories/login_repository.dart';
 import 'package:pedala/generated/assets.gen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -29,9 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     AutoRouter.of(context);
     return BlocProvider(
-      create: (_) => LoginBloc(
-        loginRepository: context.read<LoginRepository>(),
-      ),
+      create: (_) => LoginBloc(),
       child: LoginView(),
     );
   }

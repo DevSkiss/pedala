@@ -1,9 +1,15 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pedala/app/locator_injection.dart';
+import 'package:pedala/features/login/data/models/user_auth_dto.dart';
+import 'package:pedala/features/login/data/models/user_dto.dart';
 import 'package:pedala/features/login/domain/blocs/login_state.dart';
 import 'package:pedala/features/login/domain/repositories/login_repository.dart';
 
 class LoginBloc extends Cubit<LoginState> {
-  LoginBloc({required this.loginRepository})
+  LoginBloc()
       : super(LoginState(
           isLoading: false,
           success: false,
@@ -11,9 +17,7 @@ class LoginBloc extends Cubit<LoginState> {
         )) {
     initialized();
   }
-
-  final LoginRepository loginRepository;
-
+  final LoginRepository loginRepository = locator<LoginRepository>();
   void initialized() async {}
 
   Future<void> login(
@@ -25,7 +29,14 @@ class LoginBloc extends Cubit<LoginState> {
         success: false,
       ));
       await Future.delayed(const Duration(seconds: 3));
-      await loginRepository.login(username: username, password: password);
+      UserAuthDto user = await loginRepository.login(
+        username: username,
+        password: password,
+      );
+
+      if (user.access != '') {
+        debugPrint('access: ${user.access.toString()}');
+      }
 
       emit(state.copyWith(
         success: true,
@@ -39,5 +50,35 @@ class LoginBloc extends Cubit<LoginState> {
     }
   }
 
-  Future<void> createAccount() async {}
+  Future<void> createAccount({
+    required String firstname,
+    required String lastname,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      emit(state.copyWith(
+        isLoading: true,
+        hasError: false,
+        success: false,
+      ));
+      await Future.delayed(const Duration(seconds: 3));
+      UserDto user = await loginRepository.createAccount(
+          firstname: firstname,
+          lastname: lastname,
+          username: username,
+          password: password);
+
+      debugPrint(json.encode(user).toString());
+      emit(state.copyWith(
+        success: true,
+        isLoading: false,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        hasError: true,
+        isLoading: false,
+      ));
+    }
+  }
 }

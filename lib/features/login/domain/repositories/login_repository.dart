@@ -1,8 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:pedala/app/locator_injection.dart';
+import 'package:pedala/core/domain/utils/exception.dart';
+import 'package:pedala/features/login/data/models/user_auth_dto.dart';
 import 'package:pedala/features/login/data/models/user_dto.dart';
+import 'package:pedala/features/login/data/services/auth_api_service.dart';
 
 abstract class LoginRepository {
-  Future<UserDto> login({
+  Future<UserAuthDto> login({
     required String username,
     required String password,
   });
@@ -15,6 +18,8 @@ abstract class LoginRepository {
 }
 
 class LoginRepositoryImpl implements LoginRepository {
+  final AuthApiService apiService = locator<AuthApiService>();
+
   @override
   Future<UserDto> createAccount(
       {required String firstname,
@@ -22,11 +27,11 @@ class LoginRepositoryImpl implements LoginRepository {
       required String username,
       required String password}) async {
     try {
-      return UserDto(
-        'Pedala',
-        'Pedal',
-        'pedala',
-        'secret',
+      return apiService.signup(
+        firstname: firstname,
+        lastname: lastname,
+        username: username,
+        password: password,
       );
     } catch (e) {
       throw UnimplementedError();
@@ -34,21 +39,14 @@ class LoginRepositoryImpl implements LoginRepository {
   }
 
   @override
-  Future<UserDto> login({
+  Future<UserAuthDto> login({
     required String username,
     required String password,
   }) async {
-    if (username == 'pedala' && password == 'secret') {
-      debugPrint('success');
-      return UserDto(
-        'Pedala',
-        'Pedal',
-        'pedala',
-        '',
-      );
-    } else {
-      debugPrint('error');
-      throw UnimplementedError();
+    try {
+      return await apiService.login(username: username, password: password);
+    } catch (e) {
+      throw ServerException();
     }
   }
 }
