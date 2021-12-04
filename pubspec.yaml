@@ -20,6 +20,11 @@ dependencies:
   #Navigation
   auto_route: ^3.1.2
 
+  # Firebase of Things
+  firebase_auth: ^3.3.0
+  cloud_firestore: ^3.1.1
+  firebase_core: ^1.10.2
+
   ## UI
   flutter_rating_bar: ^4.0.0
 
@@ -58,7 +63,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-    - assets/icons/
 
 flutter_gen:
   output: lib/generated/

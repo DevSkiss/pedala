@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "399359763163",
+    "project_id": "pedala-d4b7b",
+    "storage_bucket": "pedala-d4b7b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399359763163:android:ad00a51960e7cca324a2fe",
+        "android_client_info": {
+          "package_name": "app.com.pedala"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399359763163-gpt99c3rcp6gbm9suhj5kb123vr9drbj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxTqTYV5NF_5KdFgF9Q7_UucegwSX4kms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399359763163-gpt99c3rcp6gbm9suhj5kb123vr9drbj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

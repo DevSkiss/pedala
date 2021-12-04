@@ -28,16 +28,32 @@ class _LoginScreenState extends State<LoginScreen> {
     AutoRouter.of(context);
     return BlocProvider(
       create: (_) => LoginBloc(),
-      child: LoginView(),
+      child: const LoginView(),
     );
   }
 }
 
-class LoginView extends StatelessWidget {
-  LoginView({Key? key}) : super(key: key);
+class LoginView extends StatefulWidget {
+  const LoginView({Key? key}) : super(key: key);
 
-  final TextEditingController usernameController = TextEditingController();
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    checkIfHasUser();
+    super.initState();
+  }
+
+  void checkIfHasUser() async {
+    bool hasUser = await context.read<LoginBloc>().initialized();
+    if (hasUser) context.router.replace(const MenuScreen());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +63,13 @@ class LoginView extends StatelessWidget {
           DialogUtils.showDialogMessage(context,
               title: 'Pedala',
               message: 'Username and Password is Incorrect', onPressed: () {
-            usernameController.clear();
+            emailController.clear();
             passwordController.clear();
             context.router.pop();
           });
         }
 
-        if (state.success || state.isAlreadyLoggedIn) {
+        if (state.isAlreadyLoggedIn) {
           context.router.replace(const MenuScreen());
         }
       },
@@ -73,12 +89,12 @@ class LoginView extends StatelessWidget {
                         width: 200,
                       ),
                       PedalaInputField(
-                        placeholder: 'Username',
+                        placeholder: 'Email',
                         leading: const Icon(
                           Icons.person,
                           color: AppColors.pedalaRed,
                         ),
-                        controller: usernameController,
+                        controller: emailController,
                       ),
                       verticalSpaceMedium,
                       PedalaInputField(
@@ -94,7 +110,7 @@ class LoginView extends StatelessWidget {
                       PedalaButton(
                         title: 'Login',
                         onTap: () => context.read<LoginBloc>().login(
-                              username: usernameController.text,
+                              email: emailController.text,
                               password: passwordController.text,
                             ),
                       ),

@@ -4,6 +4,7 @@ import 'package:pedala/features/home/data/models/food_category_dto.dart';
 import 'package:pedala/features/home/data/models/food_dto.dart';
 import 'package:pedala/features/home/domain/blocs/home_state.dart';
 import 'package:pedala/features/home/domain/repositories/home_repository.dart';
+import 'package:pedala/features/login/data/services/auth_api_service.dart';
 
 class HomeBloc extends Cubit<HomeState> {
   HomeBloc() : super(HomeState()) {
@@ -11,6 +12,7 @@ class HomeBloc extends Cubit<HomeState> {
   }
 
   final HomeRepository _homeRepository = locator<HomeRepository>();
+  final AuthApiService _authApiService = locator<AuthApiService>();
 
   void initialized() async {
     emit(state.copyWith(isLoading: true));
@@ -22,5 +24,9 @@ class HomeBloc extends Cubit<HomeState> {
         isFinished: true,
         foodCategory: listCategory,
         foodDto: listFood));
+  }
+
+  Future<void> logout() async {
+    await _authApiService.logout();
   }
 }

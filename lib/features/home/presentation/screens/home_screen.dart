@@ -6,8 +6,8 @@ import 'package:pedala/core/presentation/widgets/pedala_text.dart';
 import 'package:pedala/core/presentation/widgets/scrollable_column.dart';
 import 'package:pedala/features/home/domain/blocs/home_bloc.dart';
 import 'package:pedala/features/home/domain/blocs/home_state.dart';
-import 'package:pedala/features/home/presentation/screens/category_detail_screen.dart';
-import 'package:pedala/features/home/presentation/screens/food_detail_screen.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:pedala/app/router/app_router.gr.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -31,6 +31,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
+    AutoRouter.of(context);
     return BlocConsumer<HomeBloc, HomeState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -47,6 +48,18 @@ class _HomeViewState extends State<HomeView> {
                 color: AppColors.pedalaBody,
               ),
             ),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  await context.read<HomeBloc>().logout();
+                  context.router.replace(const LoginScreen());
+                },
+                icon: const Icon(
+                  Icons.exit_to_app,
+                  color: AppColors.pedalaBody,
+                ),
+              )
+            ],
           ),
           body: state.isLoading
               ? const Center(
@@ -72,13 +85,12 @@ class _HomeViewState extends State<HomeView> {
                         itemCount: state.foodCategory?.length,
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        CategoryDetailScreen(
-                                            foodCategory:
-                                                state.foodCategory![index]))),
+                            onTap: () {
+                              if (state.foodCategory != null) {
+                                context.router.push(CategoryDetailScreen(
+                                    foodCategory: state.foodCategory![index]));
+                              }
+                            },
                             child: Container(
                               height: 80,
                               width: 120,
@@ -116,13 +128,11 @@ class _HomeViewState extends State<HomeView> {
                       physics: const NeverScrollableScrollPhysics(),
                       children: List.generate(21, (int index) {
                         return GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      FoodDetailScreen(
-                                        food: state.foodDto![index],
-                                      ))),
+                          onTap: () => context.router.push(
+                            FoodDetailScreen(
+                              food: state.foodDto![index],
+                            ),
+                          ),
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             key: ObjectKey(index),

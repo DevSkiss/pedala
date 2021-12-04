@@ -134,12 +134,11 @@ class _SignupViewState extends State<SignupView> {
                       verticalSpaceLarge,
                       PedalaButton(
                         title: 'Create Account',
-                        onTap: () => context.read<LoginBloc>().createAccount(
-                              firstname: firstnameController.text,
-                              lastname: lastnameController.text,
-                              username: usernameController.text,
-                              password: passwordController.text,
-                            ),
+                        onTap: () =>
+                            context.read<LoginBloc>().registrationAccount(
+                                  email: usernameController.text,
+                                  password: passwordController.text,
+                                ),
                       ),
                       verticalSpaceMedium,
                       GestureDetector(

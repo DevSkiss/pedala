@@ -1,12 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pedala/app/locator_injection.dart';
 import 'package:pedala/core/domain/utils/exception.dart';
-import 'package:pedala/features/login/data/models/user_auth_dto.dart';
 import 'package:pedala/features/login/data/models/user_dto.dart';
 import 'package:pedala/features/login/data/services/auth_api_service.dart';
 
 abstract class LoginRepository {
-  Future<UserAuthDto> login({
-    required String username,
+  Future<UserCredential> login({
+    required String email,
+    required String password,
+  });
+  Future<UserCredential> registration({
+    required String email,
     required String password,
   });
   Future<UserDto> createAccount({
@@ -39,12 +43,24 @@ class LoginRepositoryImpl implements LoginRepository {
   }
 
   @override
-  Future<UserAuthDto> login({
-    required String username,
+  Future<UserCredential> login({
+    required String email,
     required String password,
   }) async {
     try {
-      return await apiService.login(username: username, password: password);
+      return await apiService.login(email: email, password: password);
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<UserCredential> registration({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      return await apiService.registration(email: email, password: password);
     } catch (e) {
       throw ServerException();
     }
