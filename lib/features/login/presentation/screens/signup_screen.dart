@@ -61,6 +61,14 @@ class _SignupViewState extends State<SignupView> {
             await context.popRoute();
           });
         }
+
+        if (state.hasError) {
+          DialogUtils.showDialogMessage(context,
+              title: 'Pedala',
+              message: 'Something Went Wrong', onPressed: () async {
+            await context.popRoute();
+          });
+        }
       },
       builder: (context, state) {
         return Scaffold(

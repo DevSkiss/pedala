@@ -20,11 +20,13 @@ class _$LoginStateTearOff {
   _LoginState call(
       {dynamic isLoading = false,
       dynamic hasError = false,
-      dynamic success = false}) {
+      dynamic success = false,
+      dynamic isAlreadyLoggedIn = false}) {
     return _LoginState(
       isLoading: isLoading,
       hasError: hasError,
       success: success,
+      isAlreadyLoggedIn: isAlreadyLoggedIn,
     );
   }
 }
@@ -37,6 +39,7 @@ mixin _$LoginState {
   dynamic get isLoading => throw _privateConstructorUsedError;
   dynamic get hasError => throw _privateConstructorUsedError;
   dynamic get success => throw _privateConstructorUsedError;
+  dynamic get isAlreadyLoggedIn => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LoginStateCopyWith<LoginState> get copyWith =>
@@ -48,7 +51,11 @@ abstract class $LoginStateCopyWith<$Res> {
   factory $LoginStateCopyWith(
           LoginState value, $Res Function(LoginState) then) =
       _$LoginStateCopyWithImpl<$Res>;
-  $Res call({dynamic isLoading, dynamic hasError, dynamic success});
+  $Res call(
+      {dynamic isLoading,
+      dynamic hasError,
+      dynamic success,
+      dynamic isAlreadyLoggedIn});
 }
 
 /// @nodoc
@@ -64,6 +71,7 @@ class _$LoginStateCopyWithImpl<$Res> implements $LoginStateCopyWith<$Res> {
     Object? isLoading = freezed,
     Object? hasError = freezed,
     Object? success = freezed,
+    Object? isAlreadyLoggedIn = freezed,
   }) {
     return _then(_value.copyWith(
       isLoading: isLoading == freezed
@@ -78,6 +86,10 @@ class _$LoginStateCopyWithImpl<$Res> implements $LoginStateCopyWith<$Res> {
           ? _value.success
           : success // ignore: cast_nullable_to_non_nullable
               as dynamic,
+      isAlreadyLoggedIn: isAlreadyLoggedIn == freezed
+          ? _value.isAlreadyLoggedIn
+          : isAlreadyLoggedIn // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 }
@@ -88,7 +100,11 @@ abstract class _$LoginStateCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
           _LoginState value, $Res Function(_LoginState) then) =
       __$LoginStateCopyWithImpl<$Res>;
   @override
-  $Res call({dynamic isLoading, dynamic hasError, dynamic success});
+  $Res call(
+      {dynamic isLoading,
+      dynamic hasError,
+      dynamic success,
+      dynamic isAlreadyLoggedIn});
 }
 
 /// @nodoc
@@ -106,11 +122,15 @@ class __$LoginStateCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
     Object? isLoading = freezed,
     Object? hasError = freezed,
     Object? success = freezed,
+    Object? isAlreadyLoggedIn = freezed,
   }) {
     return _then(_LoginState(
       isLoading: isLoading == freezed ? _value.isLoading : isLoading,
       hasError: hasError == freezed ? _value.hasError : hasError,
       success: success == freezed ? _value.success : success,
+      isAlreadyLoggedIn: isAlreadyLoggedIn == freezed
+          ? _value.isAlreadyLoggedIn
+          : isAlreadyLoggedIn,
     ));
   }
 }
@@ -119,7 +139,10 @@ class __$LoginStateCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
 
 class _$_LoginState implements _LoginState {
   _$_LoginState(
-      {this.isLoading = false, this.hasError = false, this.success = false});
+      {this.isLoading = false,
+      this.hasError = false,
+      this.success = false,
+      this.isAlreadyLoggedIn = false});
 
   @JsonKey(defaultValue: false)
   @override
@@ -130,10 +153,13 @@ class _$_LoginState implements _LoginState {
   @JsonKey(defaultValue: false)
   @override
   final dynamic success;
+  @JsonKey(defaultValue: false)
+  @override
+  final dynamic isAlreadyLoggedIn;
 
   @override
   String toString() {
-    return 'LoginState(isLoading: $isLoading, hasError: $hasError, success: $success)';
+    return 'LoginState(isLoading: $isLoading, hasError: $hasError, success: $success, isAlreadyLoggedIn: $isAlreadyLoggedIn)';
   }
 
   @override
@@ -143,7 +169,9 @@ class _$_LoginState implements _LoginState {
             other is _LoginState &&
             const DeepCollectionEquality().equals(other.isLoading, isLoading) &&
             const DeepCollectionEquality().equals(other.hasError, hasError) &&
-            const DeepCollectionEquality().equals(other.success, success));
+            const DeepCollectionEquality().equals(other.success, success) &&
+            const DeepCollectionEquality()
+                .equals(other.isAlreadyLoggedIn, isAlreadyLoggedIn));
   }
 
   @override
@@ -151,7 +179,8 @@ class _$_LoginState implements _LoginState {
       runtimeType,
       const DeepCollectionEquality().hash(isLoading),
       const DeepCollectionEquality().hash(hasError),
-      const DeepCollectionEquality().hash(success));
+      const DeepCollectionEquality().hash(success),
+      const DeepCollectionEquality().hash(isAlreadyLoggedIn));
 
   @JsonKey(ignore: true)
   @override
@@ -160,8 +189,11 @@ class _$_LoginState implements _LoginState {
 }
 
 abstract class _LoginState implements LoginState {
-  factory _LoginState({dynamic isLoading, dynamic hasError, dynamic success}) =
-      _$_LoginState;
+  factory _LoginState(
+      {dynamic isLoading,
+      dynamic hasError,
+      dynamic success,
+      dynamic isAlreadyLoggedIn}) = _$_LoginState;
 
   @override
   dynamic get isLoading;
@@ -169,6 +201,8 @@ abstract class _LoginState implements LoginState {
   dynamic get hasError;
   @override
   dynamic get success;
+  @override
+  dynamic get isAlreadyLoggedIn;
   @override
   @JsonKey(ignore: true)
   _$LoginStateCopyWith<_LoginState> get copyWith =>

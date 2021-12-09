@@ -21,10 +21,19 @@ dependencies:
   auto_route: ^3.1.2
 
   ## UI
+  flutter_rating_bar: ^4.0.0
 
   ## Architecture
   provider: ^6.0.1
-  flutter_bloc: ^8.0.0
+  flutter_bloc:
+    ^8.0.0
+
+    # Maps
+  dio: ^4.0.1
+  flutter_polyline_points: ^1.0.0
+  google_maps_flutter: ^2.0.9
+  location: ^4.3.0
+  permission_handler: ^8.3.0
 
   # Service locator
   get_it: ^7.2.0
@@ -49,7 +58,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-    - assets/icons/
 
 flutter_gen:
   output: lib/generated/
