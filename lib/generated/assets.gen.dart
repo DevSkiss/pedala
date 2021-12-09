@@ -74,6 +74,10 @@ class $AssetsImagesGen {
   AssetGenImage get filletwithfries =>
       const AssetGenImage('assets/images/filletwithfries.jpeg');
 
+  /// File path: assets/images/flutter.jpeg
+  AssetGenImage get flutter =>
+      const AssetGenImage('assets/images/flutter.jpeg');
+
   /// File path: assets/images/greenwich.png
   AssetGenImage get greenwich =>
       const AssetGenImage('assets/images/greenwich.png');

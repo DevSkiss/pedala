@@ -51,7 +51,7 @@ class CategoryDetailScreen extends StatelessWidget {
             mainAxisSpacing: 8,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            children: List.generate(5, (int index) {
+            children: List.generate(foodCategory.foods.length, (int index) {
               return GestureDetector(
                 onTap: () => Navigator.push(
                     context,

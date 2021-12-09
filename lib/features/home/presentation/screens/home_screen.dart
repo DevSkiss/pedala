@@ -114,7 +114,8 @@ class _HomeViewState extends State<HomeView> {
                       mainAxisSpacing: 8,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      children: List.generate(21, (int index) {
+                      children: List.generate(state.foodDto?.length ?? 0,
+                          (int index) {
                         return GestureDetector(
                           onTap: () => Navigator.push(
                               context,
