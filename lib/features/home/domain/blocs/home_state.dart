@@ -10,6 +10,7 @@ class HomeState with _$HomeState {
     @Default(false) isLoading,
     @Default(false) hasError,
     @Default(false) isFinished,
+    @Default(false) orderSuccess,
     List<FoodCategoryDto>? foodCategory,
     List<FoodDto>? foodDto,
   }) = _HomeState;

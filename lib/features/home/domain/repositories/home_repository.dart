@@ -1,13 +1,30 @@
+import 'package:pedala/app/locator_injection.dart';
 import 'package:pedala/features/home/data/models/food_category_dto.dart';
 import 'package:pedala/features/home/data/models/food_dto.dart';
+import 'package:pedala/features/home/data/services/home_api_service.dart';
 import 'package:pedala/generated/assets.gen.dart';
 
 abstract class HomeRepository {
   Future<List<FoodCategoryDto>> getCategoryList();
   Future<List<FoodDto>> getAllFood();
+  Future<void> craeteOrder({
+    required String customerId,
+    required String customerName,
+    required String customerAddress,
+    required String customerNo,
+    required String orderStatus,
+    required String orderProduct,
+    required String total,
+    required String customerLong,
+    required String customerLat,
+    required String riderLong,
+    required String riderLat,
+    required String riderId,
+  });
 }
 
 class HomeRepositoryImpl implements HomeRepository {
+  final HomeApiService _homeApiService = locator<HomeApiService>();
   @override
   Future<List<FoodCategoryDto>> getCategoryList() async {
     return <FoodCategoryDto>[
@@ -83,7 +100,7 @@ class HomeRepositoryImpl implements HomeRepository {
             imageUrl: Assets.images.chickensandwichfries.path,
           ),
           FoodDto(
-            name: '1pc Chicken McDo with Fries Medium Meal ',
+            name: '1pc Chicken McDo with Fries Medium Meal',
             price: '130',
             imageUrl: Assets.images.chickenfries.path,
           ),
@@ -252,5 +269,34 @@ class HomeRepositoryImpl implements HomeRepository {
         imageUrl: Assets.images.pizzaloadedcombo.path,
       ),
     ];
+  }
+
+  @override
+  Future<void> craeteOrder({
+    required String customerId,
+    required String customerName,
+    required String customerAddress,
+    required String customerNo,
+    required String orderStatus,
+    required String orderProduct,
+    required String total,
+    required String customerLong,
+    required String customerLat,
+    required String riderLong,
+    required String riderLat,
+    required String riderId,
+  }) async {
+    await _homeApiService.createOrder(
+      customerId: customerId,
+      customerName: customerName,
+      customerAddress: customerAddress,
+      customerNo: customerNo,
+      orderStatus: orderStatus,
+      orderProduct: orderProduct,
+      total: total,
+      customerLong: customerLong,
+      customerLat: customerLat,
+      riderId: riderId,
+    );
   }
 }

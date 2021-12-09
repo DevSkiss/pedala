@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -11,8 +12,15 @@ abstract class AuthApiService {
   Future<UserCredential> login(
       {required String email, required String password});
 
-  Future<UserCredential> registration(
-      {required String email, required String password});
+  Future<UserCredential> registration({
+    required String firstname,
+    required String lastname,
+    required String userType,
+    required String address,
+    required String contactNo,
+    required String email,
+    required String password,
+  });
 
   Future<UserDto> signup(
       {required String firstname,
@@ -21,11 +29,14 @@ abstract class AuthApiService {
       required String password});
 
   Future<void> logout();
+
+  Future<UserDto> getDetails({required String id});
 }
 
 class AuthApiServiceImpl extends AuthApiService {
   var client = http.Client();
   FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Future<UserCredential> login(
@@ -49,14 +60,36 @@ class AuthApiServiceImpl extends AuthApiService {
   }
 
   @override
-  Future<UserCredential> registration(
-      {required String email, required String password}) async {
+  Future<UserCredential> registration({
+    required String firstname,
+    required String lastname,
+    required String address,
+    required String contactNo,
+    required String userType,
+    required String email,
+    required String password,
+  }) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return userCredential;
+
+      return users
+          .add({
+            'user_id': userCredential.user?.uid,
+            'firstname': firstname,
+            'lastname': lastname,
+            'usertype': userType,
+            'address': address,
+            'contactNo': contactNo,
+            'email': email,
+            'longitude': '',
+            'latitude': '',
+          })
+          .then((value) => userCredential)
+          .catchError((error) => throw UserAlreadyExisting);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         debugPrint('The password provided is too weak.');
@@ -106,7 +139,7 @@ class AuthApiServiceImpl extends AuthApiService {
     if (response.statusCode == 200) {
       return response.body;
     } else if (response.statusCode == 404) {
-      throw UserNotFoundException();
+      throw UserAlreadyExisting();
     } else {
       throw ServerException();
     }
@@ -114,4 +147,17 @@ class AuthApiServiceImpl extends AuthApiService {
 
   @override
   bool get hasUser => auth.currentUser != null;
+
+  @override
+  Future<UserDto> getDetails({required String id}) async {
+    try {
+      var result = await firestore
+          .collection('users')
+          .where('user_id', isEqualTo: id)
+          .get();
+      return UserDto.fromJson(result.docs[0].data());
+    } on FirebaseAuthException {
+      throw UnimplementedError();
+    }
+  }
 }

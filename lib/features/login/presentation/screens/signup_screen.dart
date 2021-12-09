@@ -35,6 +35,8 @@ class _SignupViewState extends State<SignupView> {
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController contactNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
@@ -53,7 +55,7 @@ class _SignupViewState extends State<SignupView> {
     AutoRouter.of(context);
     return BlocConsumer<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.success) {
+        if (state.success && !state.isLoading) {
           DialogUtils.showDialogMessage(context,
               title: 'Pedala',
               message: 'Pedala Registration Success', onPressed: () async {
@@ -85,29 +87,73 @@ class _SignupViewState extends State<SignupView> {
                         height: 200,
                         width: 200,
                       ),
+                      GestureDetector(
+                        onTap: () => context.read<LoginBloc>().loginAs(),
+                        child: PedalaText.body(
+                          'Are you a ${state.isCustomer ? 'Rider' : 'Customer'} ?\nTap here to signup as ${state.isCustomer ? 'Rider' : 'Customer'}',
+                          align: TextAlign.center,
+                          color: state.isCustomer
+                              ? AppColors.pedalaRed
+                              : AppColors.pedalaBlue,
+                        ),
+                      ),
+                      verticalSpaceMedium,
                       PedalaInputField(
                         placeholder: 'Firstname',
-                        leading: const Icon(
+                        keyboardType: TextInputType.name,
+                        leading: Icon(
                           Icons.person,
-                          color: AppColors.pedalaRed,
+                          color: state.isCustomer
+                              ? AppColors.pedalaRed
+                              : AppColors.pedalaBlue,
                         ),
                         controller: firstnameController,
                       ),
                       verticalSpaceMedium,
                       PedalaInputField(
                         placeholder: 'Lastname',
-                        leading: const Icon(
+                        keyboardType: TextInputType.name,
+                        leading: Icon(
                           Icons.person,
-                          color: AppColors.pedalaRed,
+                          color: state.isCustomer
+                              ? AppColors.pedalaRed
+                              : AppColors.pedalaBlue,
                         ),
                         controller: lastnameController,
                       ),
                       verticalSpaceMedium,
                       PedalaInputField(
-                        placeholder: 'Username',
-                        leading: const Icon(
-                          Icons.person,
-                          color: AppColors.pedalaRed,
+                        placeholder: 'Address',
+                        keyboardType: TextInputType.streetAddress,
+                        leading: Icon(
+                          Icons.location_on,
+                          color: state.isCustomer
+                              ? AppColors.pedalaRed
+                              : AppColors.pedalaBlue,
+                        ),
+                        controller: addressController,
+                      ),
+                      verticalSpaceMedium,
+                      PedalaInputField(
+                        placeholder: 'Contact Number',
+                        keyboardType: TextInputType.number,
+                        leading: Icon(
+                          Icons.phone,
+                          color: state.isCustomer
+                              ? AppColors.pedalaRed
+                              : AppColors.pedalaBlue,
+                        ),
+                        controller: contactNumberController,
+                      ),
+                      verticalSpaceMedium,
+                      PedalaInputField(
+                        placeholder: 'Email',
+                        keyboardType: TextInputType.emailAddress,
+                        leading: Icon(
+                          Icons.email,
+                          color: state.isCustomer
+                              ? AppColors.pedalaRed
+                              : AppColors.pedalaBlue,
                         ),
                         controller: usernameController,
                       ),
@@ -115,9 +161,11 @@ class _SignupViewState extends State<SignupView> {
                       PedalaInputField(
                         placeholder: 'Password',
                         password: true,
-                        leading: const Icon(
+                        leading: Icon(
                           Icons.lock,
-                          color: AppColors.pedalaRed,
+                          color: state.isCustomer
+                              ? AppColors.pedalaRed
+                              : AppColors.pedalaBlue,
                         ),
                         controller: passwordController,
                       ),
@@ -125,26 +173,38 @@ class _SignupViewState extends State<SignupView> {
                       PedalaInputField(
                         placeholder: 'Confirm Password',
                         password: true,
-                        leading: const Icon(
+                        leading: Icon(
                           Icons.lock,
-                          color: AppColors.pedalaRed,
+                          color: state.isCustomer
+                              ? AppColors.pedalaRed
+                              : AppColors.pedalaBlue,
                         ),
                         controller: confirmPasswordController,
                       ),
                       verticalSpaceLarge,
                       PedalaButton(
                         title: 'Create Account',
-                        onTap: () =>
-                            context.read<LoginBloc>().registrationAccount(
-                                  email: usernameController.text,
-                                  password: passwordController.text,
-                                ),
+                        buttonColor: state.isCustomer
+                            ? AppColors.pedalaRed
+                            : AppColors.pedalaBlue,
+                        onTap: () => context
+                            .read<LoginBloc>()
+                            .registrationAccount(
+                              firstname: firstnameController.text,
+                              lastname: lastnameController.text,
+                              userType: state.isCustomer ? 'Customer' : 'Rider',
+                              address: addressController.text,
+                              contactNo: contactNumberController.text,
+                              email: usernameController.text,
+                              password: passwordController.text,
+                            ),
                       ),
                       verticalSpaceMedium,
                       GestureDetector(
                         onTap: () => context.router.pop(),
-                        child: PedalaText.body('Login'),
-                      )
+                        child: PedalaText.body('Back To Login'),
+                      ),
+                      verticalSpaceMedium,
                     ],
                   ));
       },

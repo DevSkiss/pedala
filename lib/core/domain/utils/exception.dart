@@ -6,6 +6,6 @@ class UserPasswordException implements Exception {}
 
 class ServerException implements Exception {}
 
-class UserNotFoundException implements Exception {}
+class UserAlreadyExisting implements Exception {}
 
 class CacheException implements Exception {}

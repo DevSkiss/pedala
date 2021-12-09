@@ -1,13 +1,25 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:pedala/core/domain/utils/app_colors.dart';
-import 'package:pedala/core/domain/utils/dialog_utils.dart';
-import 'package:pedala/core/presentation/widgets/pedala_button.dart';
 import 'package:pedala/core/presentation/widgets/pedala_text.dart';
-import 'package:pedala/features/menu/presentation/screens/menu_screen.dart';
 
 class OrderConfirmationScreen extends StatefulWidget {
-  const OrderConfirmationScreen({Key? key}) : super(key: key);
+  const OrderConfirmationScreen({
+    Key? key,
+    required this.customerLat,
+    required this.customerLong,
+    required this.riderLat,
+    required this.riderLong,
+    this.isCustomer = false,
+  }) : super(key: key);
+
+  final String customerLat;
+  final String customerLong;
+  final String riderLat;
+  final String riderLong;
+  final bool isCustomer;
 
   @override
   State<OrderConfirmationScreen> createState() =>
@@ -15,33 +27,53 @@ class OrderConfirmationScreen extends StatefulWidget {
 }
 
 class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
-  static const _initialCameraPosition = CameraPosition(
-    target: LatLng(13.157693, 121.186784),
-    zoom: 15.5,
-  );
+  Marker? origin;
+  Marker? destination;
+  final Location location = Location();
+  LatLng? position;
+  StreamSubscription<LocationData>? locationSubscription;
 
   GoogleMapController? _controller;
-  Marker origin = Marker(
-    markerId: const MarkerId('origin'),
-    infoWindow: const InfoWindow(title: 'Origin'),
-    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-    position: const LatLng(13.157693, 121.186784),
-  );
-
-  Marker destination = Marker(
-    markerId: const MarkerId(''),
-    infoWindow: const InfoWindow(title: 'Da Front'),
-    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-    position: const LatLng(13.165298, 121.186296),
-  );
 
   @override
   void initState() {
+    locationSubscription =
+        location.onLocationChanged.listen((LocationData currentLocation) {
+      setState(() {
+        position = LatLng(
+          currentLocation.latitude ?? 11,
+          currentLocation.longitude ?? 124,
+        );
+        _controller?.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: position ?? const LatLng(13.121128, 121.081782),
+              zoom: 16.5,
+            ),
+          ),
+        );
+      });
+    });
     super.initState();
   }
 
   @override
+  void didChangeDependencies() {
+    destination = Marker(
+      markerId: const MarkerId(''),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      position: widget.isCustomer
+          ? LatLng(
+              double.parse(widget.riderLat), double.parse(widget.riderLong))
+          : LatLng(double.parse(widget.customerLat),
+              double.parse(widget.customerLong)),
+    );
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
+    locationSubscription?.cancel();
     _controller?.dispose();
     super.dispose();
   }
@@ -51,11 +83,11 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.pedalaBody,
-        title: const PedalaText.subheading(
-          'Delivery Rider is on its way!',
-          style: TextStyle(
+        title: PedalaText.subheading(
+          widget.isCustomer ? 'Delivery ' : 'Delivery Rider is on its way!',
+          style: const TextStyle(
             color: AppColors.pedalaWhite,
-            fontSize: 24,
+            fontSize: 15,
           ),
         ),
       ),
@@ -64,37 +96,67 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
           GoogleMap(
             myLocationButtonEnabled: false,
             zoomControlsEnabled: true,
-            initialCameraPosition: _initialCameraPosition,
+            initialCameraPosition: CameraPosition(
+              target: position ?? const LatLng(13.121128, 121.081782),
+              zoom: 15.5,
+            ),
             markers: {
-              origin,
-              destination,
+              Marker(
+                markerId: const MarkerId('Me'),
+                infoWindow: InfoWindow(
+                    title: widget.isCustomer ? 'Customer' : 'Driver'),
+                icon: BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueBlue),
+                position: position ?? const LatLng(13.121128, 121.081782),
+              ),
+              destination ??
+                  Marker(
+                      markerId:
+                          MarkerId(widget.isCustomer ? 'Driver' : 'Customer')),
             },
             onMapCreated: (controller) => _controller = controller,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: <Widget>[
-                const Spacer(),
-                PedalaButton(
-                  title: 'Received Order',
-                  onTap: () {
-                    DialogUtils.showRating(
-                      context,
-                      onPressed: () => Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const MenuScreen(),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20)
-              ],
-            ),
-          )
         ],
+      ),
+      floatingActionButton: Align(
+        alignment: Alignment.bottomLeft,
+        child: Container(
+            margin: const EdgeInsets.only(top: 130, left: 30),
+            child: Row(
+              children: <Widget>[
+                FloatingActionButton(
+                  child: const Icon(Icons.location_on),
+                  onPressed: () => _controller?.animateCamera(
+                    CameraUpdate.newCameraPosition(
+                      CameraPosition(
+                        target: position ?? const LatLng(13.121128, 121.081782),
+                        zoom: 16.5,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                FloatingActionButton(
+                  backgroundColor: AppColors.pedalaRed,
+                  tooltip: widget.isCustomer ? 'Driver' : 'Customer',
+                  child: const Icon(
+                    Icons.location_on,
+                  ),
+                  onPressed: () => _controller?.animateCamera(
+                    CameraUpdate.newCameraPosition(
+                      CameraPosition(
+                        target: widget.isCustomer
+                            ? LatLng(double.parse(widget.riderLat),
+                                double.parse(widget.riderLong))
+                            : LatLng(double.parse(widget.customerLat),
+                                double.parse(widget.customerLong)),
+                        zoom: 16.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )),
       ),
     );
   }

@@ -9,6 +9,7 @@ class PedalaButton extends StatelessWidget {
   final void Function()? onTap;
   final bool outline;
   final Widget? leading;
+  final Color buttonColor;
 
   const PedalaButton({
     Key? key,
@@ -16,6 +17,7 @@ class PedalaButton extends StatelessWidget {
     this.disabled = false,
     this.busy = false,
     this.onTap,
+    this.buttonColor = AppColors.pedalaRed,
     this.leading,
   })  : outline = false,
         super(key: key);
@@ -24,6 +26,7 @@ class PedalaButton extends StatelessWidget {
     Key? key,
     required this.title,
     this.onTap,
+    this.buttonColor = AppColors.pedalaRed,
     this.leading,
   })  : disabled = false,
         busy = false,
@@ -41,7 +44,7 @@ class PedalaButton extends StatelessWidget {
         alignment: Alignment.center,
         decoration: !outline
             ? BoxDecoration(
-                color: !disabled ? AppColors.pedalaRed : AppColors.pedalaGrey,
+                color: !disabled ? buttonColor : AppColors.pedalaGrey,
                 borderRadius: BorderRadius.circular(8),
               )
             : BoxDecoration(

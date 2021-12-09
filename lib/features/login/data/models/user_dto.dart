@@ -7,11 +7,13 @@ class UserDto {
   UserDto(
     this.firstname,
     this.lastname,
-    this.username,
-    this.password,
-    this.id,
-    this.active,
-    this.createdAt,
+    this.email,
+    this.usertype,
+    this.userId,
+    this.address,
+    this.contactNo,
+    this.longitude,
+    this.latitude,
   );
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>
@@ -24,18 +26,24 @@ class UserDto {
   @JsonKey(name: 'lastname')
   final String? lastname;
 
-  @JsonKey(name: 'username')
-  final String? username;
+  @JsonKey(name: 'email')
+  final String? email;
 
-  @JsonKey(name: 'password')
-  final String? password;
+  @JsonKey(name: 'address')
+  final String address;
 
-  @JsonKey(name: '_id')
-  final String id;
+  @JsonKey(name: 'contactNo')
+  final String contactNo;
 
-  @JsonKey(name: 'active')
-  final bool? active;
+  @JsonKey(name: 'usertype')
+  final String? usertype;
 
-  @JsonKey(name: 'createdAt')
-  final String? createdAt;
+  @JsonKey(name: 'user_id')
+  final String? userId;
+
+  @JsonKey(name: 'longitude')
+  final String longitude;
+
+  @JsonKey(name: 'latitude')
+  final String latitude;
 }

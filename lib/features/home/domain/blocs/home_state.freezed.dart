@@ -21,12 +21,14 @@ class _$HomeStateTearOff {
       {dynamic isLoading = false,
       dynamic hasError = false,
       dynamic isFinished = false,
+      dynamic orderSuccess = false,
       List<FoodCategoryDto>? foodCategory,
       List<FoodDto>? foodDto}) {
     return _HomeState(
       isLoading: isLoading,
       hasError: hasError,
       isFinished: isFinished,
+      orderSuccess: orderSuccess,
       foodCategory: foodCategory,
       foodDto: foodDto,
     );
@@ -41,6 +43,7 @@ mixin _$HomeState {
   dynamic get isLoading => throw _privateConstructorUsedError;
   dynamic get hasError => throw _privateConstructorUsedError;
   dynamic get isFinished => throw _privateConstructorUsedError;
+  dynamic get orderSuccess => throw _privateConstructorUsedError;
   List<FoodCategoryDto>? get foodCategory => throw _privateConstructorUsedError;
   List<FoodDto>? get foodDto => throw _privateConstructorUsedError;
 
@@ -57,6 +60,7 @@ abstract class $HomeStateCopyWith<$Res> {
       {dynamic isLoading,
       dynamic hasError,
       dynamic isFinished,
+      dynamic orderSuccess,
       List<FoodCategoryDto>? foodCategory,
       List<FoodDto>? foodDto});
 }
@@ -74,6 +78,7 @@ class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
     Object? isLoading = freezed,
     Object? hasError = freezed,
     Object? isFinished = freezed,
+    Object? orderSuccess = freezed,
     Object? foodCategory = freezed,
     Object? foodDto = freezed,
   }) {
@@ -89,6 +94,10 @@ class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
       isFinished: isFinished == freezed
           ? _value.isFinished
           : isFinished // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      orderSuccess: orderSuccess == freezed
+          ? _value.orderSuccess
+          : orderSuccess // ignore: cast_nullable_to_non_nullable
               as dynamic,
       foodCategory: foodCategory == freezed
           ? _value.foodCategory
@@ -112,6 +121,7 @@ abstract class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
       {dynamic isLoading,
       dynamic hasError,
       dynamic isFinished,
+      dynamic orderSuccess,
       List<FoodCategoryDto>? foodCategory,
       List<FoodDto>? foodDto});
 }
@@ -130,6 +140,7 @@ class __$HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
     Object? isLoading = freezed,
     Object? hasError = freezed,
     Object? isFinished = freezed,
+    Object? orderSuccess = freezed,
     Object? foodCategory = freezed,
     Object? foodDto = freezed,
   }) {
@@ -137,6 +148,8 @@ class __$HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
       isLoading: isLoading == freezed ? _value.isLoading : isLoading,
       hasError: hasError == freezed ? _value.hasError : hasError,
       isFinished: isFinished == freezed ? _value.isFinished : isFinished,
+      orderSuccess:
+          orderSuccess == freezed ? _value.orderSuccess : orderSuccess,
       foodCategory: foodCategory == freezed
           ? _value.foodCategory
           : foodCategory // ignore: cast_nullable_to_non_nullable
@@ -156,6 +169,7 @@ class _$_HomeState implements _HomeState {
       {this.isLoading = false,
       this.hasError = false,
       this.isFinished = false,
+      this.orderSuccess = false,
       this.foodCategory,
       this.foodDto});
 
@@ -168,6 +182,9 @@ class _$_HomeState implements _HomeState {
   @JsonKey(defaultValue: false)
   @override
   final dynamic isFinished;
+  @JsonKey(defaultValue: false)
+  @override
+  final dynamic orderSuccess;
   @override
   final List<FoodCategoryDto>? foodCategory;
   @override
@@ -175,7 +192,7 @@ class _$_HomeState implements _HomeState {
 
   @override
   String toString() {
-    return 'HomeState(isLoading: $isLoading, hasError: $hasError, isFinished: $isFinished, foodCategory: $foodCategory, foodDto: $foodDto)';
+    return 'HomeState(isLoading: $isLoading, hasError: $hasError, isFinished: $isFinished, orderSuccess: $orderSuccess, foodCategory: $foodCategory, foodDto: $foodDto)';
   }
 
   @override
@@ -188,6 +205,8 @@ class _$_HomeState implements _HomeState {
             const DeepCollectionEquality()
                 .equals(other.isFinished, isFinished) &&
             const DeepCollectionEquality()
+                .equals(other.orderSuccess, orderSuccess) &&
+            const DeepCollectionEquality()
                 .equals(other.foodCategory, foodCategory) &&
             const DeepCollectionEquality().equals(other.foodDto, foodDto));
   }
@@ -198,6 +217,7 @@ class _$_HomeState implements _HomeState {
       const DeepCollectionEquality().hash(isLoading),
       const DeepCollectionEquality().hash(hasError),
       const DeepCollectionEquality().hash(isFinished),
+      const DeepCollectionEquality().hash(orderSuccess),
       const DeepCollectionEquality().hash(foodCategory),
       const DeepCollectionEquality().hash(foodDto));
 
@@ -212,6 +232,7 @@ abstract class _HomeState implements HomeState {
       {dynamic isLoading,
       dynamic hasError,
       dynamic isFinished,
+      dynamic orderSuccess,
       List<FoodCategoryDto>? foodCategory,
       List<FoodDto>? foodDto}) = _$_HomeState;
 
@@ -221,6 +242,8 @@ abstract class _HomeState implements HomeState {
   dynamic get hasError;
   @override
   dynamic get isFinished;
+  @override
+  dynamic get orderSuccess;
   @override
   List<FoodCategoryDto>? get foodCategory;
   @override

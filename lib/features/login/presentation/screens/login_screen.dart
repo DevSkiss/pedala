@@ -45,17 +45,6 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController passwordController = TextEditingController();
 
   @override
-  void initState() {
-    checkIfHasUser();
-    super.initState();
-  }
-
-  void checkIfHasUser() async {
-    bool hasUser = await context.read<LoginBloc>().initialized();
-    if (hasUser) context.router.replace(const MenuScreen());
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginBloc, LoginState>(
       listener: (context, state) {
@@ -69,12 +58,28 @@ class _LoginViewState extends State<LoginView> {
           });
         }
 
-        if (state.isAlreadyLoggedIn) {
+        if (state.hasErrorLogin) {
+          DialogUtils.showDialogMessage(context,
+              title: 'Error Logging in',
+              message:
+                  'If you are a ${state.isCustomer ? 'Rider' : 'Customer'}. Please login as ${state.isCustomer ? 'Rider' : 'Customer'}',
+              onPressed: () {
+            context.router.pop();
+          });
+        }
+
+        if ((state.userType == 'customer' || state.isAlreadyLoggedIn) &&
+            !state.isLoading) {
           context.router.replace(const MenuScreen());
+        }
+
+        if (state.userType == 'rider' && !state.isLoading) {
+          context.router.replace(const MenuDriverScreen());
         }
       },
       builder: (context, state) {
         return Scaffold(
+            backgroundColor: Colors.white,
             body: state.isLoading
                 ? const Center(
                     child: CircularProgressIndicator(),
@@ -88,11 +93,16 @@ class _LoginViewState extends State<LoginView> {
                         height: 200,
                         width: 200,
                       ),
+                      PedalaText.body(
+                          'You are logging in as ${state.isCustomer ? 'Customer' : 'Rider'}'),
+                      verticalSpaceMedium,
                       PedalaInputField(
                         placeholder: 'Email',
-                        leading: const Icon(
-                          Icons.person,
-                          color: AppColors.pedalaRed,
+                        leading: Icon(
+                          Icons.email_outlined,
+                          color: state.isCustomer
+                              ? AppColors.pedalaRed
+                              : AppColors.pedalaBlue,
                         ),
                         controller: emailController,
                       ),
@@ -100,24 +110,36 @@ class _LoginViewState extends State<LoginView> {
                       PedalaInputField(
                         placeholder: 'Password',
                         password: true,
-                        leading: const Icon(
+                        leading: Icon(
                           Icons.lock,
-                          color: AppColors.pedalaRed,
+                          color: state.isCustomer
+                              ? AppColors.pedalaRed
+                              : AppColors.pedalaBlue,
                         ),
                         controller: passwordController,
                       ),
                       verticalSpaceLarge,
                       PedalaButton(
                         title: 'Login',
+                        buttonColor: state.isCustomer
+                            ? AppColors.pedalaRed
+                            : AppColors.pedalaBlue,
                         onTap: () => context.read<LoginBloc>().login(
                               email: emailController.text,
                               password: passwordController.text,
+                              isCustomer: state.isCustomer,
                             ),
                       ),
                       verticalSpaceMedium,
                       GestureDetector(
                         onTap: () => context.router.push(const SignupScreen()),
                         child: PedalaText.body('Create Account'),
+                      ),
+                      verticalSpaceMedium,
+                      GestureDetector(
+                        onTap: () => context.read<LoginBloc>().loginAs(),
+                        child: PedalaText.body(
+                            'Login as ${!state.isCustomer ? 'Customer' : 'Rider'}'),
                       )
                     ],
                   ));

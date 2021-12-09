@@ -8,6 +8,7 @@ class PedalaInputField extends StatelessWidget {
   final Widget? trailing;
   final bool password;
   final void Function()? trailingTapped;
+  final TextInputType? keyboardType;
 
   final circularBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
@@ -18,6 +19,7 @@ class PedalaInputField extends StatelessWidget {
     required this.controller,
     this.placeholder = '',
     this.leading,
+    this.keyboardType = TextInputType.name,
     this.trailing,
     this.trailingTapped,
     this.password = false,
@@ -29,6 +31,7 @@ class PedalaInputField extends StatelessWidget {
       data: ThemeData(primaryColor: AppColors.pedalaRed),
       child: TextField(
         controller: controller,
+        keyboardType: keyboardType,
         style: const TextStyle(height: 1),
         obscureText: password,
         decoration: InputDecoration(
@@ -56,12 +59,12 @@ class PedalaInputField extends StatelessWidget {
           ),
           focusedBorder: circularBorder.copyWith(
             borderSide: const BorderSide(
-              color: AppColors.pedalaRed,
+              color: AppColors.pedalaBlue,
             ),
           ),
           enabledBorder: circularBorder.copyWith(
             borderSide: const BorderSide(
-              color: AppColors.pedalaRed,
+              color: AppColors.pedalaLightGrey,
             ),
           ),
         ),
