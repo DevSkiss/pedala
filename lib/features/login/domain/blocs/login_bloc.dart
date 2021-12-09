@@ -16,6 +16,7 @@ class LoginBloc extends Cubit<LoginState> {
           isLoading: false,
           success: false,
           hasError: false,
+          isAlreadyLoggedIn: false,
         )) {
     initialized();
   }
@@ -47,22 +48,23 @@ class LoginBloc extends Cubit<LoginState> {
         isLoading: true,
         hasError: false,
         success: false,
+        isAlreadyLoggedIn: false,
       ));
-      await Future.delayed(const Duration(seconds: 3));
+
       UserAuthDto user = await loginRepository.login(
         username: username,
         password: password,
       );
 
       if (user.access != '') {
-        debugPrint('access: ${user.access.toString()}');
+        log('access: ${user.access.toString()}');
         _sharedPreferences.setString('access', user.access);
+        emit(state.copyWith(
+          success: true,
+          isLoading: false,
+          isAlreadyLoggedIn: true,
+        ));
       }
-
-      emit(state.copyWith(
-        success: true,
-        isLoading: false,
-      ));
     } catch (e) {
       emit(state.copyWith(
         hasError: true,

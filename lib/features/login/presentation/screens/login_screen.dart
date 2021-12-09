@@ -53,7 +53,7 @@ class LoginView extends StatelessWidget {
           });
         }
 
-        if (state.success || state.isAlreadyLoggedIn) {
+        if ((state.success || state.isAlreadyLoggedIn) && !state.isLoading) {
           context.router.replace(const MenuScreen());
         }
       },
