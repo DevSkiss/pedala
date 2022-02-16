@@ -2,20 +2,20 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:pedala/app/router/app_router.gr.dart';
 
-class MenuScreen extends StatefulWidget {
-  const MenuScreen({Key? key}) : super(key: key);
+class MenuDriverScreen extends StatefulWidget {
+  const MenuDriverScreen({Key? key}) : super(key: key);
 
   @override
-  State<MenuScreen> createState() => _MenuScreenState();
+  State<MenuDriverScreen> createState() => _MenuDriverScreenState();
 }
 
-class _MenuScreenState extends State<MenuScreen> {
+class _MenuDriverScreenState extends State<MenuDriverScreen> {
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
         routes: const [
-          HomeRoute(),
-          TrackOrderRoute(),
+          OrderRoute(),
+          RecentRoute(),
         ],
         bottomNavigationBuilder: (_, tabsRouter) {
           return BottomNavigationBar(
@@ -23,14 +23,14 @@ class _MenuScreenState extends State<MenuScreen> {
             onTap: tabsRouter.setActiveIndex,
             items: const [
               BottomNavigationBarItem(
-                label: 'Users',
+                label: 'Orders',
                 icon: Icon(
-                  Icons.home,
+                  Icons.food_bank_outlined,
                 ),
               ),
               BottomNavigationBarItem(
-                label: 'Track Orders',
-                icon: Icon(Icons.delivery_dining_rounded),
+                label: 'Recent Orders',
+                icon: Icon(Icons.list_alt_rounded),
               ),
             ],
           );

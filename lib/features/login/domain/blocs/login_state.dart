@@ -3,11 +3,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'login_state.freezed.dart';
 
 @freezed
-abstract class LoginState with _$LoginState {
+class LoginState with _$LoginState {
   factory LoginState({
-    @Default(false) isLoading,
-    @Default(false) hasError,
-    @Default(false) success,
-    @Default(false) isAlreadyLoggedIn,
+    @Default(false) bool isLoading,
+    @Default(false) bool hasError,
+    @Default(false) bool success,
+    @Default(false) bool isAlreadyLoggedIn,
+    @Default(true) bool isCustomer,
+    @Default(false) bool hasErrorLogin,
+    String? userType,
   }) = _LoginState;
 }

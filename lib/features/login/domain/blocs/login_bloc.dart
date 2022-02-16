@@ -5,10 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pedala/app/locator_injection.dart';
+import 'package:pedala/core/domain/utils/exception.dart';
 import 'package:pedala/features/login/data/models/user_dto.dart';
 import 'package:pedala/features/login/data/services/auth_api_service.dart';
 import 'package:pedala/features/login/domain/blocs/login_state.dart';
 import 'package:pedala/features/login/domain/repositories/login_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginBloc extends Cubit<LoginState> {
   LoginBloc()
@@ -22,36 +24,43 @@ class LoginBloc extends Cubit<LoginState> {
 
   final LoginRepository loginRepository = locator<LoginRepository>();
   final AuthApiService _authApiService = locator<AuthApiService>();
+  final SharedPreferences _sharedPreferences = locator<SharedPreferences>();
 
-  Future<bool> initialized() async {
+  Future<void> initialized() async {
     emit(state.copyWith(
       isLoading: false,
       isAlreadyLoggedIn: false,
       success: false,
     ));
-
-    if (_authApiService.hasUser) {
-      // log(_authApiService.hasUser.toString());
-      return true;
-    } else {
-      return false;
-    }
   }
 
-  Future<void> login({required String email, required String password}) async {
+  void loginAs() {
+    emit(state.copyWith(
+      isCustomer: !state.isCustomer,
+      hasError: false,
+      hasErrorLogin: false,
+      success: false,
+      isLoading: false,
+    ));
+  }
+
+  Future<void> login(
+      {required String email,
+      required String password,
+      required bool isCustomer}) async {
     emit(state.copyWith(
       hasError: false,
       isLoading: true,
       isAlreadyLoggedIn: false,
+      hasErrorLogin: false,
       success: false,
     ));
     try {
-      // emit(state.copyWith(
-      //   isLoading: true,
-      //   hasError: false,
-      //   success: false,
-      // ));
-      //await Future.delayed(const Duration(seconds: 3));
+      emit(state.copyWith(
+        isLoading: true,
+        hasError: false,
+        success: false,
+      ));
       UserCredential user = await loginRepository.login(
         email: email,
         password: password,
@@ -59,16 +68,45 @@ class LoginBloc extends Cubit<LoginState> {
 
       log('this is bloc result user:');
       log(user.user.toString());
-      emit(state.copyWith(
-        isLoading: false,
-        isAlreadyLoggedIn: true,
-        success: true,
-      ));
+      UserDto userDetails =
+          await loginRepository.getDetails(userId: user.user?.uid ?? '');
 
-      // if (user.access != '') {
-      //   debugPrint('access: ${user.access.toString()}');
-      //   _sharedPreferences.setString('access', user.access);
-      // }
+      if (user.user.toString() != '') {
+        _sharedPreferences.setString(
+            'UserDetailsDTO', json.encode(userDetails));
+      }
+
+      if (userDetails.usertype == 'Customer') {
+        if (isCustomer) {
+          emit(state.copyWith(
+            isLoading: false,
+            userType: 'customer',
+            success: true,
+          ));
+        } else {
+          await _authApiService.logout();
+          emit(state.copyWith(
+            isLoading: false,
+            hasErrorLogin: true,
+            success: false,
+          ));
+        }
+      } else {
+        if (!isCustomer) {
+          emit(state.copyWith(
+            isLoading: false,
+            userType: 'rider',
+            success: true,
+          ));
+        } else {
+          await _authApiService.logout();
+          emit(state.copyWith(
+            isLoading: false,
+            hasErrorLogin: true,
+            success: false,
+          ));
+        }
+      }
 
       // emit(state.copyWith(
       //   success: true,
@@ -88,17 +126,33 @@ class LoginBloc extends Cubit<LoginState> {
     }
   }
 
-  Future<void> registrationAccount({required email, required password}) async {
+  Future<void> registrationAccount(
+      {required String firstname,
+      required String lastname,
+      required String userType,
+      required String address,
+      required String contactNo,
+      required String email,
+      required String password}) async {
     try {
-      UserCredential user = await loginRepository.registration(
+      emit(state.copyWith(isLoading: true));
+      await loginRepository.registration(
+        firstname: firstname,
+        lastname: lastname,
+        userType: userType,
+        address: address,
+        contactNo: contactNo,
         email: email,
         password: password,
       );
 
-      log('register');
-      log(user.additionalUserInfo.toString());
+      emit(state.copyWith(
+        success: true,
+        isLoading: false,
+      ));
     } catch (e) {
       debugPrint('catch error $e');
+      throw UserAlreadyExisting();
     }
   }
 

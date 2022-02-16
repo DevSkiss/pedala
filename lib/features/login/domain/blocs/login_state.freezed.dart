@@ -18,15 +18,21 @@ class _$LoginStateTearOff {
   const _$LoginStateTearOff();
 
   _LoginState call(
-      {dynamic isLoading = false,
-      dynamic hasError = false,
-      dynamic success = false,
-      dynamic isAlreadyLoggedIn = false}) {
+      {bool isLoading = false,
+      bool hasError = false,
+      bool success = false,
+      bool isAlreadyLoggedIn = false,
+      bool isCustomer = true,
+      bool hasErrorLogin = false,
+      String? userType}) {
     return _LoginState(
       isLoading: isLoading,
       hasError: hasError,
       success: success,
       isAlreadyLoggedIn: isAlreadyLoggedIn,
+      isCustomer: isCustomer,
+      hasErrorLogin: hasErrorLogin,
+      userType: userType,
     );
   }
 }
@@ -36,10 +42,13 @@ const $LoginState = _$LoginStateTearOff();
 
 /// @nodoc
 mixin _$LoginState {
-  dynamic get isLoading => throw _privateConstructorUsedError;
-  dynamic get hasError => throw _privateConstructorUsedError;
-  dynamic get success => throw _privateConstructorUsedError;
-  dynamic get isAlreadyLoggedIn => throw _privateConstructorUsedError;
+  bool get isLoading => throw _privateConstructorUsedError;
+  bool get hasError => throw _privateConstructorUsedError;
+  bool get success => throw _privateConstructorUsedError;
+  bool get isAlreadyLoggedIn => throw _privateConstructorUsedError;
+  bool get isCustomer => throw _privateConstructorUsedError;
+  bool get hasErrorLogin => throw _privateConstructorUsedError;
+  String? get userType => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LoginStateCopyWith<LoginState> get copyWith =>
@@ -52,10 +61,13 @@ abstract class $LoginStateCopyWith<$Res> {
           LoginState value, $Res Function(LoginState) then) =
       _$LoginStateCopyWithImpl<$Res>;
   $Res call(
-      {dynamic isLoading,
-      dynamic hasError,
-      dynamic success,
-      dynamic isAlreadyLoggedIn});
+      {bool isLoading,
+      bool hasError,
+      bool success,
+      bool isAlreadyLoggedIn,
+      bool isCustomer,
+      bool hasErrorLogin,
+      String? userType});
 }
 
 /// @nodoc
@@ -72,24 +84,39 @@ class _$LoginStateCopyWithImpl<$Res> implements $LoginStateCopyWith<$Res> {
     Object? hasError = freezed,
     Object? success = freezed,
     Object? isAlreadyLoggedIn = freezed,
+    Object? isCustomer = freezed,
+    Object? hasErrorLogin = freezed,
+    Object? userType = freezed,
   }) {
     return _then(_value.copyWith(
       isLoading: isLoading == freezed
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as bool,
       hasError: hasError == freezed
           ? _value.hasError
           : hasError // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as bool,
       success: success == freezed
           ? _value.success
           : success // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as bool,
       isAlreadyLoggedIn: isAlreadyLoggedIn == freezed
           ? _value.isAlreadyLoggedIn
           : isAlreadyLoggedIn // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as bool,
+      isCustomer: isCustomer == freezed
+          ? _value.isCustomer
+          : isCustomer // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hasErrorLogin: hasErrorLogin == freezed
+          ? _value.hasErrorLogin
+          : hasErrorLogin // ignore: cast_nullable_to_non_nullable
+              as bool,
+      userType: userType == freezed
+          ? _value.userType
+          : userType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -101,10 +128,13 @@ abstract class _$LoginStateCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
       __$LoginStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {dynamic isLoading,
-      dynamic hasError,
-      dynamic success,
-      dynamic isAlreadyLoggedIn});
+      {bool isLoading,
+      bool hasError,
+      bool success,
+      bool isAlreadyLoggedIn,
+      bool isCustomer,
+      bool hasErrorLogin,
+      String? userType});
 }
 
 /// @nodoc
@@ -123,14 +153,39 @@ class __$LoginStateCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
     Object? hasError = freezed,
     Object? success = freezed,
     Object? isAlreadyLoggedIn = freezed,
+    Object? isCustomer = freezed,
+    Object? hasErrorLogin = freezed,
+    Object? userType = freezed,
   }) {
     return _then(_LoginState(
-      isLoading: isLoading == freezed ? _value.isLoading : isLoading,
-      hasError: hasError == freezed ? _value.hasError : hasError,
-      success: success == freezed ? _value.success : success,
+      isLoading: isLoading == freezed
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hasError: hasError == freezed
+          ? _value.hasError
+          : hasError // ignore: cast_nullable_to_non_nullable
+              as bool,
+      success: success == freezed
+          ? _value.success
+          : success // ignore: cast_nullable_to_non_nullable
+              as bool,
       isAlreadyLoggedIn: isAlreadyLoggedIn == freezed
           ? _value.isAlreadyLoggedIn
-          : isAlreadyLoggedIn,
+          : isAlreadyLoggedIn // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isCustomer: isCustomer == freezed
+          ? _value.isCustomer
+          : isCustomer // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hasErrorLogin: hasErrorLogin == freezed
+          ? _value.hasErrorLogin
+          : hasErrorLogin // ignore: cast_nullable_to_non_nullable
+              as bool,
+      userType: userType == freezed
+          ? _value.userType
+          : userType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -142,24 +197,35 @@ class _$_LoginState implements _LoginState {
       {this.isLoading = false,
       this.hasError = false,
       this.success = false,
-      this.isAlreadyLoggedIn = false});
+      this.isAlreadyLoggedIn = false,
+      this.isCustomer = true,
+      this.hasErrorLogin = false,
+      this.userType});
 
   @JsonKey(defaultValue: false)
   @override
-  final dynamic isLoading;
+  final bool isLoading;
   @JsonKey(defaultValue: false)
   @override
-  final dynamic hasError;
+  final bool hasError;
   @JsonKey(defaultValue: false)
   @override
-  final dynamic success;
+  final bool success;
   @JsonKey(defaultValue: false)
   @override
-  final dynamic isAlreadyLoggedIn;
+  final bool isAlreadyLoggedIn;
+  @JsonKey(defaultValue: true)
+  @override
+  final bool isCustomer;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool hasErrorLogin;
+  @override
+  final String? userType;
 
   @override
   String toString() {
-    return 'LoginState(isLoading: $isLoading, hasError: $hasError, success: $success, isAlreadyLoggedIn: $isAlreadyLoggedIn)';
+    return 'LoginState(isLoading: $isLoading, hasError: $hasError, success: $success, isAlreadyLoggedIn: $isAlreadyLoggedIn, isCustomer: $isCustomer, hasErrorLogin: $hasErrorLogin, userType: $userType)';
   }
 
   @override
@@ -167,20 +233,24 @@ class _$_LoginState implements _LoginState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _LoginState &&
-            const DeepCollectionEquality().equals(other.isLoading, isLoading) &&
-            const DeepCollectionEquality().equals(other.hasError, hasError) &&
-            const DeepCollectionEquality().equals(other.success, success) &&
-            const DeepCollectionEquality()
-                .equals(other.isAlreadyLoggedIn, isAlreadyLoggedIn));
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
+            (identical(other.hasError, hasError) ||
+                other.hasError == hasError) &&
+            (identical(other.success, success) || other.success == success) &&
+            (identical(other.isAlreadyLoggedIn, isAlreadyLoggedIn) ||
+                other.isAlreadyLoggedIn == isAlreadyLoggedIn) &&
+            (identical(other.isCustomer, isCustomer) ||
+                other.isCustomer == isCustomer) &&
+            (identical(other.hasErrorLogin, hasErrorLogin) ||
+                other.hasErrorLogin == hasErrorLogin) &&
+            (identical(other.userType, userType) ||
+                other.userType == userType));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(isLoading),
-      const DeepCollectionEquality().hash(hasError),
-      const DeepCollectionEquality().hash(success),
-      const DeepCollectionEquality().hash(isAlreadyLoggedIn));
+  int get hashCode => Object.hash(runtimeType, isLoading, hasError, success,
+      isAlreadyLoggedIn, isCustomer, hasErrorLogin, userType);
 
   @JsonKey(ignore: true)
   @override
@@ -190,19 +260,28 @@ class _$_LoginState implements _LoginState {
 
 abstract class _LoginState implements LoginState {
   factory _LoginState(
-      {dynamic isLoading,
-      dynamic hasError,
-      dynamic success,
-      dynamic isAlreadyLoggedIn}) = _$_LoginState;
+      {bool isLoading,
+      bool hasError,
+      bool success,
+      bool isAlreadyLoggedIn,
+      bool isCustomer,
+      bool hasErrorLogin,
+      String? userType}) = _$_LoginState;
 
   @override
-  dynamic get isLoading;
+  bool get isLoading;
   @override
-  dynamic get hasError;
+  bool get hasError;
   @override
-  dynamic get success;
+  bool get success;
   @override
-  dynamic get isAlreadyLoggedIn;
+  bool get isAlreadyLoggedIn;
+  @override
+  bool get isCustomer;
+  @override
+  bool get hasErrorLogin;
+  @override
+  String? get userType;
   @override
   @JsonKey(ignore: true)
   _$LoginStateCopyWith<_LoginState> get copyWith =>

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pedala/app/locator_injection.dart';
 import 'package:pedala/core/domain/utils/exception.dart';
@@ -10,6 +12,11 @@ abstract class LoginRepository {
     required String password,
   });
   Future<UserCredential> registration({
+    required String firstname,
+    required String lastname,
+    required String address,
+    required String contactNo,
+    required String userType,
     required String email,
     required String password,
   });
@@ -19,6 +26,8 @@ abstract class LoginRepository {
     required String username,
     required String password,
   });
+
+  Future<UserDto> getDetails({required String userId});
 }
 
 class LoginRepositoryImpl implements LoginRepository {
@@ -56,13 +65,34 @@ class LoginRepositoryImpl implements LoginRepository {
 
   @override
   Future<UserCredential> registration({
+    required String firstname,
+    required String lastname,
+    required String address,
+    required String contactNo,
+    required String userType,
     required String email,
     required String password,
   }) async {
     try {
-      return await apiService.registration(email: email, password: password);
+      return await apiService.registration(
+        firstname: firstname,
+        lastname: lastname,
+        userType: userType,
+        address: address,
+        contactNo: contactNo,
+        email: email,
+        password: password,
+      );
+    } on FirebaseException catch (e) {
+      log(e.code.toString());
+      throw UserAlreadyExisting();
     } catch (e) {
       throw ServerException();
     }
+  }
+
+  @override
+  Future<UserDto> getDetails({required String userId}) async {
+    return await apiService.getDetails(id: userId);
   }
 }

@@ -27,6 +27,7 @@ dependencies:
 
   ## UI
   flutter_rating_bar: ^4.0.0
+  flutter_slidable: ^1.1.0
 
   ## Architecture
   provider: ^6.0.1
